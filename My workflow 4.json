@@ -1,0 +1,127 @@
+{
+  "name": "My workflow 4",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "task",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2f99ffec-73a6-485b-87c1-b42408fa7273",
+      "name": "Webhook",
+      "webhookId": "6f30b4e1-09cc-4c9c-a255-4ce931a01a1a"
+    },
+    {
+      "parameters": {
+        "sendTo": "ruchikababurp@gmail.com",
+        "subject": "to do",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        560,
+        0
+      ],
+      "id": "5be1aeef-b514-4b64-b216-3667703bee36",
+      "name": "Send a message",
+      "webhookId": "422d8b2b-353c-4546-a668-5169909243ef",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "cuchGw7evmPHDtvf",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a smart AI learning assistant.\n\nYour task is to help the user create a clear, structured study session plan for one of these subjects: {{ $json.body.task }}\n\nWhen the user provides their inputs, respond with a formatted plan including:\n- Selected Subject\n- Specified Topic\n- Scheduled Date & Time\n- Additional Details or Learning Objectives\n\nAlways keep your output user-friendly, clear, and concise.\n\nExample output:\n-----------------------------------\n📚 **Learning Session Plan**\n\n**Subject:** {{ $json.body.task }}\n**Topic:** Supervised vs. Unsupervised Learning  \n**Date:** July 10, 2025  \n**Time:** 6:00 PM - 7:00 PM  \n**Additional Details:** Focus on examples of algorithms for each type, prepare questions about real-world use cases.\n-----------------------------------\n\nIf any field is missing, politely ask the user for the missing info in a clear way.\n ",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "949e1e17-cdcd-42f6-8b2e-fd987706f487",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        200,
+        180
+      ],
+      "id": "c5584b7f-57b1-4ad9-be57-778bc1d973fa",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "0yYrbityqlpWeREI",
+          "name": "Google Gemini(PaLM) Api account 5"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8ade75b2-7772-463f-b6b3-fe000fbb208f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e826d2f1c3cb173c1cb2233e327dc24b26c4e0922f801ad0edf0d7d112f50f03"
+  },
+  "id": "j6QXGMVtPgH6olu0",
+  "tags": []
+}
